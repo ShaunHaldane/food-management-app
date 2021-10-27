@@ -8,7 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-</head>
+
 <body>
 
 		<nav class="navbar navbar-expand navbar-dark bg-dark">
@@ -31,58 +31,26 @@
 				<a sec:authorize="!isAnonymous()" th:href="@{/logout}" class="btn btn-secondary">Logout</a>
 			</div>	
 		</nav>
-		
-	<div class="container">
-		<div class="row">
-			<div class="col-sm">
-			</div>
-			
-			<div class="col-sm-8">
-				<h1 class="text-center" style="margin-top:30px;margin-bottom:30px"><u>Add/Edit Food Item</u></h1>
-				
-				<form action="#" th:action="@{/processAddItemForm}" th:object="${foodItem}" method="post">
-				
-					<div class="form-group">
-						<input type="hidden" class="form-control" th:field="*{id}">
-					</div>
-				
-					<div class="form-group">
-						<label>Item</label>
-						<input type="text" class="form-control" th:field="*{item}">
-					</div>
-					
-					<div class="form-group">
-						<label>Expiry Date</label>
-						<input type="date" class="form-control" th:field="*{expiryDate}">
-					</div>
-					
-					<div class="form-group">
-						<label>Price</label>
-						<input type="text" class="form-control" th:field="*{price}" >
-					</div>
-					
-					
-					<div class="form-row">
-						<div class="col">
-							<input class="btn btn-success" type="submit" value="Submit">
-						</div>
-						<div class="col">
-							<a th:href="@{/dashboard}" class="btn btn-warning float-right">Back</a>
-						</div>
-					</div>
-				</form>
-			</div>
-			
-			<div class="col-sm">
-			</div>
-		</div>
-	</div>
-	
-		<div class = "text-center" style="margin-top:220px">
-        	<footer class = "footer">
-               <span class="text-muted">Shaun Haldane. 2021. All Rights Reserved. </span>
-               <a th:href=@{/privacyPolicy}><span class="text-muted"> Privacy Policy.</span></a>
-            </footer>
-         </div>
+
+            <div class="text-center container" style="margin-top:30px">
+                <h1><u>Privacy Policy</u></h1>
+                <h4>Your privacy is important to me. I will respect your privacy 
+                    regarding any information I may collect from you across my website.
+                    I only ask for personal information when I truly need it to provide a service to you. 
+                    I collect it by fair and lawful means, with your knowledge and consent. 
+                    I only retain collected information for as long as necessary to provide you with your requested service. 
+                    What data I store, I’ll protect within commercially acceptable means to prevent loss and theft, 
+                    as well as unauthorised access, disclosure, copying, use or modification.
+                    I don’t share any personally identifying information publicly or with third-parties, 
+                    except when required to by law.
+                    You are free to refuse my request for your personal information, 
+                    with the understanding that I may be unable to provide you with your desired services.
+                    Your continued use of my website will be regarded as acceptance of my practices around privacy 
+                    and personal information. 
+                    If you have any questions about how I handle user data and personal information, feel free to contact me at shaun.haldane@gmail.com.</h4>
+            
+            	<a th:href="@{/}">Go Back</a>
+            </div>
+
 </body>
 </html>

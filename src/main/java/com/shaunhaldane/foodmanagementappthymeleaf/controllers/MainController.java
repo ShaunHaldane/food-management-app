@@ -42,6 +42,11 @@ public class MainController {
 		return "home";
 	}
 	
+	@GetMapping("/privacyPolicy")
+	public String getPrivacyPolicy() {
+		return "privacy-policy";
+	}
+	
 	@GetMapping("/dashboard")
 	public String getDashboard(Model model, Principal principal) {
 		List<FoodItem> foodItems = foodItemService.getAll(principal.getName());
@@ -103,13 +108,13 @@ public class MainController {
 		return "redirect:/dashboard";
 	}
 	
-	@GetMapping("/thisYearGraph")
+	@GetMapping("/graphs")
 	public String getMoneySpentThisYearGraph(Model backlogModel, Model wastedItemsModel, Principal principal) {
 		List<Backlog> backlogList = backlogService.getAll(principal.getName());
 		List<WastedItem> wastedItems = wastedItemService.getAll(principal.getName());
 		backlogModel.addAttribute("backlogList", backlogList);
 		wastedItemsModel.addAttribute("wastedItems", wastedItems);
-		return "spent-this-year";
+		return "graphs";
 	}
 	
 }

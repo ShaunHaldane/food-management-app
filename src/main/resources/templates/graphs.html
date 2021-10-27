@@ -12,17 +12,31 @@
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </head>
 <body>
+
+		<nav class="navbar navbar-expand navbar-dark bg-dark">
+			<div class="navbar-brand">
+				<h3>Food Management App</h3>
+			</div>
+			<div class="nav-item" style="padding:20px">
+				<a sec:authorize="hasRole('CLIENT')" th:href="@{/dashboard}" class="btn btn-success">View Current Stock</a>
+			</div>
+			<div class="nav-item" style="padding:20px">
+				<a sec:authorize="hasRole('CLIENT')" th:href="@{/addFoodItem}" class="btn btn-success">Add Food Item</a>
+			</div>
+			<div class="nav-item" style="padding:20px">	
+				<a sec:authorize="hasRole('CLIENT')" th:href="@{/graphs}" class="btn btn-success">Money Spent/Wasted</a>
+			</div>
+			<div class="nav-item" style="padding:20px">	
+				<a sec:authorize="hasRole('ADMIN')" th:href="@{/deleteUser}" class="btn btn-primary">Delete a User</a>
+			</div>
+			<div class="ml-auto">
+				<a sec:authorize="!isAnonymous()" th:href="@{/logout}" class="btn btn-secondary">Logout</a>
+			</div>	
+		</nav>
+		
 	<div class="container">
-		
-		<a sec:authorize="hasRole('ADMIN')" th:href="@{/deleteUser}" class="btn btn-primary">Delete a User</a>
-		<a sec:authorize="hasRole('CLIENT')" th:href="@{/dashboard}" class="btn btn-primary">View Stock</a>
-		<a sec:authorize="hasRole('CLIENT')" th:href="@{/addFoodItem}" class="btn btn-primary">Add Food Item</a>
-		<a sec:authorize="hasRole('CLIENT')" th:href="@{/thisYearGraph}" class="btn btn-primary">Money Spent/Wasted</a>
-		<a sec:authorize="!isAnonymous()" th:href="@{/logout}" class="btn btn-secondary float-right">Logout</a>
-		
-		<br>
-		<br>
-		<h1>Spent </h1>
+		<h3 id="titleSpent" class="text-center" style="margin-top:30px"></h3>
+		<h3 id="titleWasted" class="text-center" style="color:red"></h3>
 
 		<script type="text/javascript" th:inline="javascript">
 		
@@ -1574,11 +1588,52 @@
 		var totalSpentDec = dec1+dec2+dec3+dec4+dec5+dec6+dec7+dec8+dec9+dec10+dec11+dec12+dec13+dec14+dec15+dec16+dec17+dec18+dec19+dec20
 		+dec21+dec22+dec23+dec24+dec25+dec26+dec27+dec28+dec29+dec30+dec31;
 		
+		var spentYear = totalSpentJan+totalSpentFeb+totalSpentMar+totalSpentApr+totalSpentMay+totalSpentJun+totalSpentJul+
+			totalSpentAug+totalSpentSep+totalSpentOct+totalSpentNov+totalSpentDec;
+		
+	//////////////////////////////Arrays ////////////////////////////////////////////////////
+	
+		var totalSpentJanArray = [jan1,jan2,jan3,jan4,jan5,jan6,jan7,jan8,jan9,jan10,jan11,jan12,jan13,jan14,jan15,jan16,jan17,jan18,jan19,jan20
+		,jan21,jan22,jan23,jan24,jan25,jan26,jan27,jan28,jan29,jan30,jan31];
+		
+		var totalSpentFebArray = [feb1,feb2,feb3,feb4,feb5,feb6,feb7,feb8,feb9,feb10,feb11,feb12,feb13,feb14,feb15,feb16,feb17,feb18,feb19,feb20
+		,feb21,feb22,feb23,feb24,feb25,feb26,feb27,feb28,feb29];
+		
+		var totalSpentMarArray = [mar1,mar2,mar3,mar4,mar5,mar6,mar7,mar8,mar9,mar10,mar11,mar12,mar13,mar14,mar15,mar16,mar17,mar18,mar19,mar20
+		,mar21,mar22,mar23,mar24,mar25,mar26,mar27,mar28,mar29,mar30,mar31];
+		
+		var totalSpentAprArray = [apr1,apr2,apr3,apr4,apr5,apr6,apr7,apr8,apr9,apr10,apr11,apr12,apr13,apr14,apr15,apr16,apr17,apr18,apr19,apr20
+		,apr21,apr22,apr23,apr24,apr25,apr26,apr27,apr28,apr29,apr30];
+		
+		var totalSpentMayArray = [may1,may2,may3,may4,may5,may6,may7,may8,may9,may10,may11,may12,may13,may14,may15,may16,may17,may18,may19,may20
+		,may21,may22,may23,may24,may25,may26,may27,may28,may29,may30,may31];
+		
+		var totalSpentJunArray = [jun1,jun2,jun3,jun4,jun5,jun6,jun7,jun8,jun9,jun10,jun11,jun12,jun13,jun14,jun15,jun16,jun17,jun18,jun19,jun20
+		,jun21,jun22,jun23,jun24,jun25,jun26,jun27,jun28,jun29,jun30];
+		
+		var totalSpentJulArray = [jul1,jul2,jul3,jul4,jul5,jul6,jul7,jul8,jul9,jul10,jul11,jul12,jul13,jul14,jul15,jul16,jul17,jul18,jul19,jul20
+		,jul21,jul22,jul23,jul24,jul25,jul26,jul27,jul28,jul29,jul30,jul31];
+		
+		var totalSpentAugArray = [aug1,aug2,aug3,aug4,aug5,aug6,aug7,aug8,aug9,aug10,aug11,aug12,aug13,aug14,aug15,aug16,aug17,aug18,aug19,aug20
+		,aug21,aug22,aug23,aug24,aug25,aug26,aug27,aug28,aug29,aug30,aug31];
+		
+		var totalSpentSepArray = [sep1,sep2,sep3,sep4,sep5,sep6,sep7,sep8,sep9,sep10,sep11,sep12,sep13,sep14,sep15,sep16,sep17,sep18,sep19,sep20
+		,sep21,sep22,sep23,sep24,sep25,sep26,sep27,sep28,sep29,sep30];
+		
+		var totalSpentOctArray = [oct1,oct2,oct3,oct4,oct5,oct6,oct7,oct8,oct9,oct10,oct11,oct12,oct13,oct14,oct15,oct16,oct17,oct18,oct19,oct20
+		,oct21,oct22,oct23,oct24,oct25,oct26,oct27,oct28,oct29,oct30,oct31];
+		
+		var totalSpentNovArray = [nov1,nov2,nov3,nov4,nov5,nov6,nov7,nov8,nov9,nov10,nov11,nov12,nov13,nov14,nov15,nov16,nov17,nov18,nov19,nov20
+		,nov21,nov22,nov23,nov24,nov25,nov26,nov27,nov28,nov29,nov30];
+		
+		var totalSpentDecArray = [dec1,dec2,dec3,dec4,dec5,dec6,dec7,dec8,dec9,dec10,dec11,dec12,dec13,dec14,dec15,dec16,dec17,dec18,dec19,dec20
+		,dec21,dec22,dec23,dec24,dec25,dec26,dec27,dec28,dec29,dec30,dec31];
+		
 		var spentArrayYear = [totalSpentJan, totalSpentFeb, totalSpentMar, totalSpentApr, totalSpentMay, totalSpentJun, totalSpentJul,
 			totalSpentAug, totalSpentSep, totalSpentOct, totalSpentNov, totalSpentDec];
 		
 		
-		
+		//////////////////////////Wasted Items Logic ///////////////////////////////////////////////////////////
 		
 		var jan1Wasted = 0;
 		var jan2Wasted = 0;
@@ -3141,13 +3196,70 @@
 		+dec11Wasted+dec12Wasted+dec13Wasted+dec14Wasted+dec15Wasted+dec16Wasted+dec17Wasted+dec18Wasted+dec19Wasted+dec20Wasted
 		+dec21Wasted+dec22Wasted+dec23Wasted+dec24Wasted+dec25Wasted+dec26Wasted+dec27Wasted+dec28Wasted+dec29Wasted+dec30Wasted+dec31Wasted;
 		
+		var wastedYear = totalWastedJan+totalWastedFeb+totalWastedMar+totalWastedApr+totalWastedMay+totalWastedJun+totalWastedJul+
+			totalWastedAug+totalWastedSep+totalWastedOct+totalWastedNov+totalWastedDec;
+		
+		////////////////////////////Arrays /////////////////////////////////////
+		
+		var totalWastedJanArray = [jan1Wasted,jan2Wasted,jan3Wasted,jan4Wasted,jan5Wasted,jan6Wasted,jan7Wasted,jan8Wasted,jan9Wasted,jan10Wasted
+		,jan11Wasted+jan12Wasted,jan13Wasted,jan14Wasted,jan15Wasted,jan16Wasted,jan17Wasted,jan18Wasted,jan19Wasted,jan20Wasted
+		,jan21Wasted,jan22Wasted,jan23Wasted,jan24Wasted,jan25Wasted,jan26Wasted,jan27Wasted,jan28Wasted,jan29Wasted,jan30Wasted,jan31Wasted];
+		
+		var totalWastedFebArray = [feb1Wasted,feb2Wasted,feb3Wasted,feb4Wasted,feb5Wasted,feb6Wasted,feb7Wasted,feb8Wasted,feb9Wasted,feb10Wasted
+		,feb11Wasted,feb12Wasted,feb13Wasted,feb14Wasted,feb15Wasted,feb16Wasted,feb17Wasted,feb18Wasted,feb19Wasted,feb20Wasted
+		,feb21Wasted,feb22Wasted,feb23Wasted,feb24Wasted,feb25Wasted,feb26Wasted,feb27Wasted,feb28Wasted,feb29Wasted];
+		
+		var totalWastedMarArray = [mar1Wasted,mar2Wasted,mar3Wasted,mar4Wasted,mar5Wasted,mar6Wasted,mar7Wasted,mar8Wasted,mar9Wasted,mar10Wasted
+		,mar11Wasted+mar12Wasted,mar13Wasted,mar14Wasted,mar15Wasted,mar16Wasted,mar17Wasted,mar18Wasted,mar19Wasted,mar20Wasted
+		,mar21Wasted,mar22Wasted,mar23Wasted,mar24Wasted,mar25Wasted,mar26Wasted,mar27Wasted,mar28Wasted,mar29Wasted,mar30Wasted,mar31Wasted];
+		
+		var totalWastedAprArray = [apr1Wasted,apr2Wasted,apr3Wasted,apr4Wasted,apr5Wasted,apr6Wasted,apr7Wasted,apr8Wasted,apr9Wasted,apr10Wasted
+		,apr11Wasted,apr12Wasted,apr13Wasted,apr14Wasted,apr15Wasted,apr16Wasted,apr17Wasted,apr18Wasted,apr19Wasted,apr20Wasted
+		,apr21Wasted,apr22Wasted,apr23Wasted,apr24Wasted,apr25Wasted,apr26Wasted,apr27Wasted,apr28Wasted,apr29Wasted,apr30Wasted];
+		
+		var totalWastedMayArray = [may1Wasted,may2Wasted,may3Wasted,may4Wasted,may5Wasted,may6Wasted,may7Wasted,may8Wasted,may9Wasted,may10Wasted
+		,may11Wasted,may12Wasted,may13Wasted,may14Wasted,may15Wasted,may16Wasted,may17Wasted,may18Wasted,may19Wasted,may20Wasted
+		,may21Wasted,may22Wasted,may23Wasted,may24Wasted,may25Wasted,may26Wasted,may27Wasted,may28Wasted,may29Wasted,may30Wasted,may31Wasted];
+		
+		var totalWastedJunArray = [jun1Wasted,jun2Wasted,jun3Wasted,jun4Wasted,jun5Wasted,jun6Wasted,jun7Wasted,jun8Wasted,jun9Wasted,jun10Wasted
+		,jun11Wasted,jun12Wasted,jun13Wasted,jun14Wasted,jun15Wasted,jun16Wasted,jun17Wasted,jun18Wasted,jun19Wasted,jun20Wasted
+		,jun21Wasted,jun22Wasted,jun23Wasted,jun24Wasted,jun25Wasted,jun26Wasted,jun27Wasted,jun28Wasted,jun29Wasted,jun30Wasted];
+		
+		var totalWastedJulArray = [jul1Wasted,jul2Wasted,jul3Wasted,jul4Wasted,jul5Wasted,jul6Wasted,jul7Wasted,jul8Wasted,jul9Wasted,jul10Wasted
+		,jul11Wasted,jul12Wasted,jul13Wasted,jul14Wasted,jul15Wasted,jul16Wasted,jul17Wasted,jul18Wasted,jul19Wasted,jul20Wasted
+		,jul21Wasted,jul22Wasted,jul23Wasted,jul24Wasted,jul25Wasted,jul26Wasted,jul27Wasted,jul28Wasted,jul29Wasted,jul30Wasted,jul31Wasted];
+		
+		var totalWastedAugArray = [aug1Wasted,aug2Wasted,aug3Wasted,aug4Wasted,aug5Wasted,aug6Wasted,aug7Wasted,aug8Wasted,aug9Wasted,aug10Wasted
+		,aug11Wasted,aug12Wasted,aug13Wasted,aug14Wasted,aug15Wasted,aug16Wasted,aug17Wasted,aug18Wasted,aug19Wasted,aug20Wasted
+		,aug21Wasted,aug22Wasted,aug23Wasted,aug24Wasted,aug25Wasted,aug26Wasted,aug27Wasted,aug28Wasted,aug29Wasted,aug30Wasted,aug31Wasted];
+		
+		var totalWastedSepArray = [sep1Wasted,sep2Wasted,sep3Wasted,sep4Wasted,sep5Wasted,sep6Wasted,sep7Wasted,sep8Wasted,sep9Wasted,sep10Wasted
+		,sep11Wasted,sep12Wasted,sep13Wasted,sep14Wasted,sep15Wasted,sep16Wasted,sep17Wasted,sep18Wasted,sep19Wasted,sep20Wasted
+		,sep21Wasted,sep22Wasted,sep23Wasted,sep24Wasted,sep25Wasted,sep26Wasted,sep27Wasted,sep28Wasted,sep29Wasted,sep30Wasted];
+		
+		var totalWastedOctArray = [oct1Wasted,oct2Wasted,oct3Wasted,oct4Wasted,oct5Wasted,oct6Wasted,oct7Wasted,oct8Wasted,oct9Wasted,oct10Wasted
+		,oct11Wasted,oct12Wasted,oct13Wasted,oct14Wasted,oct15Wasted,oct16Wasted,oct17Wasted,oct18Wasted,oct19Wasted,oct20Wasted
+		,oct21Wasted,oct22Wasted,oct23Wasted,oct24Wasted,oct25Wasted,oct26Wasted,oct27Wasted,oct28Wasted,oct29Wasted,oct30Wasted,oct31Wasted];
+		
+		var totalWastedNovArray = [nov1Wasted,nov2Wasted,nov3Wasted,nov4Wasted,nov5Wasted,nov6Wasted,nov7Wasted,nov8Wasted,nov9Wasted,nov10Wasted
+		,nov11Wasted,nov12Wasted,nov13Wasted,nov14Wasted,nov15Wasted,nov16Wasted,nov17Wasted,nov18Wasted,nov19Wasted,nov20Wasted
+		,nov21Wasted,nov22Wasted,nov23Wasted,nov24Wasted,nov25Wasted,nov26Wasted,nov27Wasted,nov28Wasted,nov29Wasted,nov30Wasted];
+		
+		var totalWastedDecArray = [dec1Wasted,dec2Wasted,dec3Wasted,dec4Wasted,dec5Wasted,dec6Wasted,dec7Wasted,dec8Wasted,dec9Wasted,dec10Wasted
+		,dec11Wasted,dec12Wasted,dec13Wasted,dec14Wasted,dec15Wasted,dec16Wasted,dec17Wasted,dec18Wasted,dec19Wasted,dec20Wasted
+		,dec21Wasted,dec22Wasted,dec23Wasted,dec24Wasted,dec25Wasted,dec26Wasted,dec27Wasted,dec28Wasted,dec29Wasted,dec30Wasted,dec31Wasted];
+		
 		var wastedArrayYear = [totalWastedJan, totalWastedFeb, totalWastedMar, totalWastedApr, totalWastedMay, totalWastedJun, totalWastedJul,
 			totalWastedAug, totalWastedSep, totalWastedOct, totalWastedNov, totalWastedDec];
 		
-		window.onload = function(){showMoneySpentThisYearGraph();}	
 		
-		function showMoneySpentThisYearGraph(){
-		    var graphDataArray = [];
+		//////////////////////////////Graphs //////////////////////////////////////////////////////////////
+		
+		window.onload = function(){showThisYearDetails();}	
+		
+		function showThisYearDetails(){
+		    var moneySpentDataArray = [];
+		    var moneyWastedDataArray = [];
 		    var month = " ";
 		    for (var i = 0; i < spentArrayYear.length; i++) {
 		    	if(i == 0){
@@ -3186,110 +3298,568 @@
 		    	if(i == 11){
 		    		month = "Dec";
 		    	}
-		        graphDataArray.push({"y": spentArrayYear[i], label: month});
+		    	moneySpentDataArray.push({"y": spentArrayYear[i], label: month});
+		    	moneyWastedDataArray.push({"y": wastedArrayYear[i]});
 		    }
 		    var chart = new CanvasJS.Chart("chartContainer", {
 		        animationEnabled: true,
 		        theme: "light4",
 		        title: {
-		            text: "Euros Spent This Year"
+		            text: "This Year",
 		        },
+		        axisY: {
+	        		prefix: "€"
+	        	},
 		        data: [{
 		        	type: "line",
 		            lineColor: "black",
 		            markerColor: "black",
+		            name: "Money Spent",
+		    		showInLegend: true,
 		            indexLabelFontSize: 16,
-		            dataPoints: graphDataArray
+		            dataPoints: moneySpentDataArray
+		        },
+		        {
+		        	type: "line",
+		            lineColor: "red",
+		            markerColor: "red",
+		            indexLabelFontSize: 16,
+		            name: "Money Wasted",
+		    		showInLegend: true,
+		            dataPoints: moneyWastedDataArray
 		        }]
 		    });
+		    document.getElementById("titleSpent").innerHTML = "Total Spent This Year: €" + spentYear;
+		    document.getElementById("titleWasted").innerHTML = "Total Wasted This Year: €" + wastedYear;
 		    chart.render();
-	    
 		}
 		
-		function showMoneyWastedThisYearGraph() {
-		    var graphDataArray = [];
-		    var month = " ";
-		    for (var i = 0; i < wastedArrayYear.length; i++) {
-		    	if(i == 0){
-		    		month = "Jan";
-		    	}
-		    	if(i == 1){
-		    		month = "Feb";
-		    	}
-		    	if(i == 2){
-		    		month = "Mar";
-		    	}
-		    	if(i == 3){
-		    		month = "Apr";
-		    	}
-		    	if(i == 4){
-		    		month = "May";
-		    	}
-		    	if(i == 5){
-		    		month = "Jun";
-		    	}
-		    	if(i == 6){
-		    		month = "Jul";
-		    	}
-		    	if(i == 7){
-		    		month = "Aug";
-		    	}
-		    	if(i == 8){
-		    		month = "Sep";
-		    	}
-		    	if(i == 9){
-		    		month = "Oct";
-		    	}
-		    	if(i == 10){
-		    		month = "Nov";
-		    	}
-		    	if(i == 11){
-		    		month = "Dec";
-		    	}
-		        graphDataArray.push({"y": wastedArrayYear[i], label: month});
+		//////////////////January graph //////////////////////////////////////////////
+		function showJanDetails(){
+		    var moneySpentDataArray = [];
+		    var moneyWastedDataArray = [];
+		    for (var i = 0; i < totalSpentJanArray.length; i++) {
+		    	moneySpentDataArray.push({"y": totalSpentJanArray[i]});
+		    	moneyWastedDataArray.push({"y": totalWastedJanArray[i]});
 		    }
 		    var chart = new CanvasJS.Chart("chartContainer", {
 		        animationEnabled: true,
 		        theme: "light4",
 		        title: {
-		            text: "Euros Spent This Year"
+		            text: "January",
 		        },
+		        axisY: {
+	        		prefix: "€"
+	        	},
 		        data: [{
+		        	type: "line",
+		            lineColor: "black",
+		            markerColor: "black",
+		            name: "Money Spent",
+		    		showInLegend: true,
+		            indexLabelFontSize: 16,
+		            dataPoints: moneySpentDataArray
+		        },
+		        {
 		        	type: "line",
 		            lineColor: "red",
 		            markerColor: "red",
 		            indexLabelFontSize: 16,
-		            dataPoints: graphDataArray
+		            name: "Money Wasted",
+		    		showInLegend: true,
+		            dataPoints: moneyWastedDataArray
 		        }]
 		    });
-		    
+		    document.getElementById("titleSpent").innerHTML = "Total Spent Jan: €" + totalSpentJan;
+		    document.getElementById("titleWasted").innerHTML = "Total Wasted Jan: €" + totalWastedJan;
 		    chart.render();
-		    
-			}
- 		
-	
+		}
+		
+		//////////////////Febuary graph //////////////////////////////////////////////
+		function showFebDetails(){
+		    var moneySpentDataArray = [];
+		    var moneyWastedDataArray = [];
+		    for (var i = 0; i < totalSpentFebArray.length; i++) {
+		    	moneySpentDataArray.push({"y": totalSpentFebArray[i]});
+		    	moneyWastedDataArray.push({"y": totalWastedFebArray[i]});
+		    }
+		    var chart = new CanvasJS.Chart("chartContainer", {
+		        animationEnabled: true,
+		        theme: "light4",
+		        title: {
+		            text: "Febuary",
+		        },
+		        axisY: {
+	        		prefix: "€"
+	        	},
+		        data: [{
+		        	type: "line",
+		            lineColor: "black",
+		            markerColor: "black",
+		            name: "Money Spent",
+		    		showInLegend: true,
+		            indexLabelFontSize: 16,
+		            dataPoints: moneySpentDataArray
+		        },
+		        {
+		        	type: "line",
+		            lineColor: "red",
+		            markerColor: "red",
+		            indexLabelFontSize: 16,
+		            name: "Money Wasted",
+		    		showInLegend: true,
+		            dataPoints: moneyWastedDataArray
+		        }]
+		    });
+		    document.getElementById("titleSpent").innerHTML = "Total Spent Feb: €" + totalSpentFeb;
+		    document.getElementById("titleWasted").innerHTML = "Total Wasted Feb: €" + totalWastedFeb;
+		    chart.render();
+		}
+		
+		//////////////////March graph //////////////////////////////////////////////
+		function showMarDetails(){
+		    var moneySpentDataArray = [];
+		    var moneyWastedDataArray = [];
+		    for (var i = 0; i < totalSpentMarArray.length; i++) {
+		    	moneySpentDataArray.push({"y": totalSpentMarArray[i]});
+		    	moneyWastedDataArray.push({"y": totalWastedMarArray[i]});
+		    }
+		    var chart = new CanvasJS.Chart("chartContainer", {
+		        animationEnabled: true,
+		        theme: "light4",
+		        title: {
+		            text: "March",
+		        },
+		        axisY: {
+	        		prefix: "€"
+	        	},
+		        data: [{
+		        	type: "line",
+		            lineColor: "black",
+		            markerColor: "black",
+		            name: "Money Spent",
+		    		showInLegend: true,
+		            indexLabelFontSize: 16,
+		            dataPoints: moneySpentDataArray
+		        },
+		        {
+		        	type: "line",
+		            lineColor: "red",
+		            markerColor: "red",
+		            indexLabelFontSize: 16,
+		            name: "Money Wasted",
+		    		showInLegend: true,
+		            dataPoints: moneyWastedDataArray
+		        }]
+		    });
+		    document.getElementById("titleSpent").innerHTML = "Total Spent Mar: €" + totalSpentMar;
+		    document.getElementById("titleWasted").innerHTML = "Total Wasted Mar: €" + totalWastedMar;
+		    chart.render();
+		}
+		
+		//////////////////April graph //////////////////////////////////////////////
+		function showAprDetails(){
+		    var moneySpentDataArray = [];
+		    var moneyWastedDataArray = [];
+		    for (var i = 0; i < totalSpentAprArray.length; i++) {
+		    	moneySpentDataArray.push({"y": totalSpentAprArray[i]});
+		    	moneyWastedDataArray.push({"y": totalWastedAprArray[i]});
+		    }
+		    var chart = new CanvasJS.Chart("chartContainer", {
+		        animationEnabled: true,
+		        theme: "light4",
+		        title: {
+		            text: "April",
+		        },
+		        axisY: {
+	        		prefix: "€"
+	        	},
+		        data: [{
+		        	type: "line",
+		            lineColor: "black",
+		            markerColor: "black",
+		            name: "Money Spent",
+		    		showInLegend: true,
+		            indexLabelFontSize: 16,
+		            dataPoints: moneySpentDataArray
+		        },
+		        {
+		        	type: "line",
+		            lineColor: "red",
+		            markerColor: "red",
+		            indexLabelFontSize: 16,
+		            name: "Money Wasted",
+		    		showInLegend: true,
+		            dataPoints: moneyWastedDataArray
+		        }]
+		    });
+		    document.getElementById("titleSpent").innerHTML = "Total Spent Apr: €" + totalSpentApr;
+		    document.getElementById("titleWasted").innerHTML = "Total Wasted Apr: €" + totalWastedApr;
+		    chart.render();
+		}
+		
+		//////////////////May graph //////////////////////////////////////////////
+		function showMayDetails(){
+		    var moneySpentDataArray = [];
+		    var moneyWastedDataArray = [];
+		    for (var i = 0; i < totalSpentMayArray.length; i++) {
+		    	moneySpentDataArray.push({"y": totalSpentMayArray[i]});
+		    	moneyWastedDataArray.push({"y": totalWastedMayArray[i]});
+		    }
+		    var chart = new CanvasJS.Chart("chartContainer", {
+		        animationEnabled: true,
+		        theme: "light4",
+		        title: {
+		            text: "May",
+		        },
+		        axisY: {
+	        		prefix: "€"
+	        	},
+		        data: [{
+		        	type: "line",
+		            lineColor: "black",
+		            markerColor: "black",
+		            name: "Money Spent",
+		    		showInLegend: true,
+		            indexLabelFontSize: 16,
+		            dataPoints: moneySpentDataArray
+		        },
+		        {
+		        	type: "line",
+		            lineColor: "red",
+		            markerColor: "red",
+		            indexLabelFontSize: 16,
+		            name: "Money Wasted",
+		    		showInLegend: true,
+		            dataPoints: moneyWastedDataArray
+		        }]
+		    });
+		    document.getElementById("titleSpent").innerHTML = "Total Spent May: €" + totalSpentMay;
+		    document.getElementById("titleWasted").innerHTML = "Total Wasted May: €" + totalWastedMay;
+		    chart.render();
+		}
+		
+		//////////////////June graph //////////////////////////////////////////////
+		function showJunDetails(){
+		    var moneySpentDataArray = [];
+		    var moneyWastedDataArray = [];
+		    for (var i = 0; i < totalSpentJunArray.length; i++) {
+		    	moneySpentDataArray.push({"y": totalSpentJunArray[i]});
+		    	moneyWastedDataArray.push({"y": totalWastedJunArray[i]});
+		    }
+		    var chart = new CanvasJS.Chart("chartContainer", {
+		        animationEnabled: true,
+		        theme: "light4",
+		        title: {
+		            text: "June",
+		        },
+		        axisY: {
+	        		prefix: "€"
+	        	},
+		        data: [{
+		        	type: "line",
+		            lineColor: "black",
+		            markerColor: "black",
+		            name: "Money Spent",
+		    		showInLegend: true,
+		            indexLabelFontSize: 16,
+		            dataPoints: moneySpentDataArray
+		        },
+		        {
+		        	type: "line",
+		            lineColor: "red",
+		            markerColor: "red",
+		            indexLabelFontSize: 16,
+		            name: "Money Wasted",
+		    		showInLegend: true,
+		            dataPoints: moneyWastedDataArray
+		        }]
+		    });
+		    document.getElementById("titleSpent").innerHTML = "Total Spent Jun: €" + totalSpentJun;
+		    document.getElementById("titleWasted").innerHTML = "Total Wasted Jun: €" + totalWastedJun;
+		    chart.render();
+		}
+		
+		//////////////////July graph //////////////////////////////////////////////
+		function showJulDetails(){
+		    var moneySpentDataArray = [];
+		    var moneyWastedDataArray = [];
+		    for (var i = 0; i < totalSpentJulArray.length; i++) {
+		    	moneySpentDataArray.push({"y": totalSpentJulArray[i]});
+		    	moneyWastedDataArray.push({"y": totalWastedJulArray[i]});
+		    }
+		    var chart = new CanvasJS.Chart("chartContainer", {
+		        animationEnabled: true,
+		        theme: "light4",
+		        title: {
+		            text: "July",
+		        },
+		        axisY: {
+	        		prefix: "€"
+	        	},
+		        data: [{
+		        	type: "line",
+		            lineColor: "black",
+		            markerColor: "black",
+		            name: "Money Spent",
+		    		showInLegend: true,
+		            indexLabelFontSize: 16,
+		            dataPoints: moneySpentDataArray
+		        },
+		        {
+		        	type: "line",
+		            lineColor: "red",
+		            markerColor: "red",
+		            indexLabelFontSize: 16,
+		            name: "Money Wasted",
+		    		showInLegend: true,
+		            dataPoints: moneyWastedDataArray
+		        }]
+		    });
+		    document.getElementById("titleSpent").innerHTML = "Total Spent Jul: €" + totalSpentJul;
+		    document.getElementById("titleWasted").innerHTML = "Total Wasted Jul: €" + totalWastedJul;
+		    chart.render();
+		}
+		
+		//////////////////Aug graph //////////////////////////////////////////////
+		function showAugDetails(){
+		    var moneySpentDataArray = [];
+		    var moneyWastedDataArray = [];
+		    for (var i = 0; i < totalSpentAugArray.length; i++) {
+		    	moneySpentDataArray.push({"y": totalSpentAugArray[i]});
+		    	moneyWastedDataArray.push({"y": totalWastedAugArray[i]});
+		    }
+		    var chart = new CanvasJS.Chart("chartContainer", {
+		        animationEnabled: true,
+		        theme: "light4",
+		        title: {
+		            text: "August",
+		        },
+		        axisY: {
+	        		prefix: "€"
+	        	},
+		        data: [{
+		        	type: "line",
+		            lineColor: "black",
+		            markerColor: "black",
+		            name: "Money Spent",
+		    		showInLegend: true,
+		            indexLabelFontSize: 16,
+		            dataPoints: moneySpentDataArray
+		        },
+		        {
+		        	type: "line",
+		            lineColor: "red",
+		            markerColor: "red",
+		            indexLabelFontSize: 16,
+		            name: "Money Wasted",
+		    		showInLegend: true,
+		            dataPoints: moneyWastedDataArray
+		        }]
+		    });
+		    document.getElementById("titleSpent").innerHTML = "Total Spent Aug: €" + totalSpentAug;
+		    document.getElementById("titleWasted").innerHTML = "Total Wasted Aug: €" + totalWastedAug;
+		    chart.render();
+		}
+		
+		//////////////////Sept graph //////////////////////////////////////////////
+		function showSepDetails(){
+		    var moneySpentDataArray = [];
+		    var moneyWastedDataArray = [];
+		    for (var i = 0; i < totalSpentSepArray.length; i++) {
+		    	moneySpentDataArray.push({"y": totalSpentSepArray[i]});
+		    	moneyWastedDataArray.push({"y": totalWastedSepArray[i]});
+		    }
+		    var chart = new CanvasJS.Chart("chartContainer", {
+		        animationEnabled: true,
+		        theme: "light4",
+		        title: {
+		            text: "September",
+		        },
+		        axisY: {
+	        		prefix: "€"
+	        	},
+		        data: [{
+		        	type: "line",
+		            lineColor: "black",
+		            markerColor: "black",
+		            name: "Money Spent",
+		    		showInLegend: true,
+		            indexLabelFontSize: 16,
+		            dataPoints: moneySpentDataArray
+		        },
+		        {
+		        	type: "line",
+		            lineColor: "red",
+		            markerColor: "red",
+		            indexLabelFontSize: 16,
+		            name: "Money Wasted",
+		    		showInLegend: true,
+		            dataPoints: moneyWastedDataArray
+		        }]
+		    });
+		    document.getElementById("titleSpent").innerHTML = "Total Spent Sep: €" + totalSpentSep;
+		    document.getElementById("titleWasted").innerHTML = "Total Wasted Sep: €" + totalWastedSep;
+		    chart.render();
+		}
+		
+		//////////////////Oct graph //////////////////////////////////////////////
+		function showOctDetails(){
+		    var moneySpentDataArray = [];
+		    var moneyWastedDataArray = [];
+		    for (var i = 0; i < totalSpentOctArray.length; i++) {
+		    	moneySpentDataArray.push({"y": totalSpentOctArray[i]});
+		    	moneyWastedDataArray.push({"y": totalWastedOctArray[i]});
+		    }
+		    var chart = new CanvasJS.Chart("chartContainer", {
+		        animationEnabled: true,
+		        theme: "light4",
+		        title: {
+		            text: "October",
+		        },
+		        axisY: {
+	        		prefix: "€"
+	        	},
+		        data: [{
+		        	type: "line",
+		            lineColor: "black",
+		            markerColor: "black",
+		            name: "Money Spent",
+		    		showInLegend: true,
+		            indexLabelFontSize: 16,
+		            dataPoints: moneySpentDataArray
+		        },
+		        {
+		        	type: "line",
+		            lineColor: "red",
+		            markerColor: "red",
+		            indexLabelFontSize: 16,
+		            name: "Money Wasted",
+		    		showInLegend: true,
+		            dataPoints: moneyWastedDataArray
+		        }]
+		    });
+		    document.getElementById("titleSpent").innerHTML = "Total Spent Oct: €" + totalSpentOct;
+		    document.getElementById("titleWasted").innerHTML = "Total Wasted Oct: €" + totalWastedOct;
+		    chart.render();
+		}
+		
+		//////////////////Nov graph //////////////////////////////////////////////
+		function showNovDetails(){
+		    var moneySpentDataArray = [];
+		    var moneyWastedDataArray = [];
+		    for (var i = 0; i < totalSpentNovArray.length; i++) {
+		    	moneySpentDataArray.push({"y": totalSpentNovArray[i]});
+		    	moneyWastedDataArray.push({"y": totalWastedNovArray[i]});
+		    }
+		    var chart = new CanvasJS.Chart("chartContainer", {
+		        animationEnabled: true,
+		        theme: "light4",
+		        title: {
+		            text: "November",
+		        },
+		        axisY: {
+	        		prefix: "€"
+	        	},
+		        data: [{
+		        	type: "line",
+		            lineColor: "black",
+		            markerColor: "black",
+		            name: "Money Spent",
+		    		showInLegend: true,
+		            indexLabelFontSize: 16,
+		            dataPoints: moneySpentDataArray
+		        },
+		        {
+		        	type: "line",
+		            lineColor: "red",
+		            markerColor: "red",
+		            indexLabelFontSize: 16,
+		            name: "Money Wasted",
+		    		showInLegend: true,
+		            dataPoints: moneyWastedDataArray
+		        }]
+		    });
+		    document.getElementById("titleSpent").innerHTML = "Total Spent Nov: €" + totalSpentNov;
+		    document.getElementById("titleWasted").innerHTML = "Total Wasted Nov: €" + totalWastedNov;
+		    chart.render();
+		}
+		
+		//////////////////Dec graph //////////////////////////////////////////////
+		function showDecDetails(){
+		    var moneySpentDataArray = [];
+		    var moneyWastedDataArray = [];
+		    for (var i = 0; i < totalSpentDecArray.length; i++) {
+		    	moneySpentDataArray.push({"y": totalSpentDecArray[i]});
+		    	moneyWastedDataArray.push({"y": totalWastedDecArray[i]});
+		    }
+		    var chart = new CanvasJS.Chart("chartContainer", {
+		        animationEnabled: true,
+		        theme: "light4",
+		        title: {
+		            text: "December",
+		        },
+		        axisY: {
+	        		prefix: "€"
+	        	},
+		        data: [{
+		        	type: "line",
+		            lineColor: "black",
+		            markerColor: "black",
+		            name: "Money Spent",
+		    		showInLegend: true,
+		            indexLabelFontSize: 16,
+		            dataPoints: moneySpentDataArray
+		        },
+		        {
+		        	type: "line",
+		            lineColor: "red",
+		            markerColor: "red",
+		            indexLabelFontSize: 16,
+		            name: "Money Wasted",
+		    		showInLegend: true,
+		            dataPoints: moneyWastedDataArray
+		        }]
+		    });
+		    document.getElementById("titleSpent").innerHTML = "Total Spent Dec: €" + totalSpentDec;
+		    document.getElementById("titleWasted").innerHTML = "Total Wasted Dec: €" + totalWastedDec;
+		    chart.render();
+		}
+		
+		
 		</script>
 		
-		
-		
-		<div class="button-container">
-			<input type="button" value="Spent This Year" onclick="showMoneySpentThisYearGraph()" class="btn btn-success" />
-			<input type="button" value="Wasted This Year" onclick="showMoneyWastedThisYearGraph()" class="btn btn-success" />
-<!-- <input type="button" value="Spent This Year" -->
-<!-- onclick="thisYearSpendButtonClicked()" -->
-<!-- class="btn btn-success" /> -->
-
-<!-- <input type="button" value="Money Wasted" -->
-<!-- onclick="moneyWastedButtonClicked()" -->
-<!-- class="btn btn-success" /> -->
-
-<!-- <input type="button" value="Reset Graph" -->
-<!-- onclick="window.location.href='FoodItemControllerServlet';" -->
-<!-- class="btn btn-success" /> -->
-
-<div id="chartContainer"></div>
-		
 	
+		<div class="button-container text-center" style="margin-top:30px;margin-bottom:50px">
+			<input type="button" value="This Year" onclick="showThisYearDetails()" class="btn btn-primary" />
+
+			<input type="button" value="Jan" onclick="showJanDetails()" class="btn btn-primary" style="margin-left:50px"/>
+		
+			<input type="button" value="Feb" onclick="showFebDetails()" class="btn btn-primary" />
+
+			<input type="button" value="Mar" onclick="showMarDetails()" class="btn btn-primary" />
+
+			<input type="button" value="Apr" onclick="showAprDetails()" class="btn btn-primary" />
+
+			<input type="button" value="May" onclick="showMayDetails()" class="btn btn-primary" />
+
+			<input type="button" value="Jun" onclick="showJunDetails()" class="btn btn-primary" />
+
+			<input type="button" value="Jul" onclick="showJulDetails()" class="btn btn-primary" />
+
+			<input type="button" value="Aug" onclick="showAugDetails()" class="btn btn-primary" />
+
+			<input type="button" value="Sep" onclick="showSepDetails()" class="btn btn-primary" />
+
+			<input type="button" value="Oct" onclick="showOctDetails()" class="btn btn-primary" />
+
+			<input type="button" value="Nov" onclick="showNovDetails()" class="btn btn-primary" />
+
+			<input type="button" value="Dec" onclick="showDecDetails()" class="btn btn-primary" />
+		</div>
+
+		<div id="chartContainer"></div>
+			
 	</div>
 </body>
 </html>
