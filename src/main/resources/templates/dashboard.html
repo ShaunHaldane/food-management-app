@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	  
+<head>
+<meta charset="UTF-8">
+<title>Home page</title>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</head>
+<body>
+	<div class="container">
+		
+		<a sec:authorize="hasRole('ADMIN')" th:href="@{/deleteUser}" class="btn btn-primary">Delete a User</a>
+		<a sec:authorize="hasRole('CLIENT')" th:href="@{/dashboard}" class="btn btn-primary">View Stock</a>
+		<a sec:authorize="hasRole('CLIENT')" th:href="@{/addFoodItem}" class="btn btn-primary">Add Food Item</a>
+		<a sec:authorize="hasRole('CLIENT')" th:href="@{/thisYearGraph}" class="btn btn-primary">Money Spent/Wasted</a>
+		<a sec:authorize="!isAnonymous()" th:href="@{/logout}" class="btn btn-secondary float-right">Logout</a>
+		
+		<br>
+		<br>
+		
+		<h3>Hello <span sec:authorize="isAuthenticated()">
+								<span sec:authentication="name"></span>
+							</span>
+							<span sec:authorize="isAnonymous()">dear guest</span>
+		</h3>
+		
+		<table class="table table-hover" th:if="${!foodItems.empty}">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Item</th>
+						<th scope="col">Expiry Date</th>
+						<th scope="col">Price</th>
+						<th scope="col">Details</th>
+						<th sec:authorize="hasRole('CLIENT')" scope="col">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="foodItem : ${foodItems}">	
+						<td th:text="${foodItemStat.count}"></td>				
+						<td th:text="${foodItem.item}"></td>
+						<td>
+						<script type="text/javascript" th:inline="javascript">
+						
+						var dd =""
+						var mm=""
+						var yyyy=""
+						var formattedDate=""
+						
+						for(var i = 0; i < [[${foodItems}]].length; i++){
+							dd = [[${foodItem.expiryDate.substring(8,10)}]];
+							mm = [[${foodItem.expiryDate.substring(5, 7)}]];
+							yyyy = [[${foodItem.expiryDate.substring(0,4)}]];
+						}
+						formattedDate = dd + "/" + mm + "/" + yyyy;
+						document.write(dd + "/" + mm + "/" + yyyy)
+						
+						
+						</script>
+						</td>
+						<td th:text="${foodItem.price}"></td>
+						<td>
+						<script type="text/javascript" th:inline="javascript">
+
+						d = new Date();
+						day = d.getDate();
+						var message = "";
+						var expiryDate;
+    							for(var i = 0; i < [[${foodItems}]].length; i++){
+    								expiryDay = parseInt([[${foodItem.expiryDate.substring(8,10)}]]);
+    								if(expiryDay - day < 0 ) {
+    									message = "Expired";
+    								}
+    								else if(expiryDay - day == 0) {
+    									message = "Expires today";
+    								}
+    								else if(expiryDay - day == 1) {
+    									message = "Expires tomorrow";
+    								}
+    								else if(expiryDay - day > 1 && expiryDay - day < 3) {
+    									message = "Expires in " + expiryDay - day + " days";
+    								}
+    								else {
+    									message = "Item is good";
+    								}
+    							}
+    							
+    							document.write(message);
+							    
+							</script>
+						</td>
+						<td sec:authorize="hasRole('CLIENT')"><a class="btn btn-primary" th:href="@{/editFoodItem/} + ${foodItem.id}">Edit Item</a>
+						<a class="btn btn-primary" th:href="@{/wastedFoodItem/} + ${foodItem.id}">Wasted Item</a>
+						<a class="btn btn-primary" th:href="@{/usedFoodItem/} + ${foodItem.id}">Used Item</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+</body>
+</html>
